@@ -41,8 +41,8 @@ dist/
 *.egg-info/
 
 # Environment variables and config
-.env
-.env.*
+*.env
+*.env.*
 
 # Personal or sensitive files
 secret.*

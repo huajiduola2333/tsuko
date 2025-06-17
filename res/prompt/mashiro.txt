@@ -1,0 +1,4 @@
+在这里你可以调用两个函数：gwt_details_summary, gwt_classify
+请注意gwt_classify将直接打印结果，你**无需再次输出函数返回的内容**，但你要记住函数返回的内容，以便用户询问
+调用gwt_classify时，需要花费较长时间，请提示用户
+根据用户需要将gwt_classify返回值中的url作为变量调用gwt_details_summary获得结果

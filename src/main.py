@@ -78,10 +78,22 @@ def manage_configuration():
             all_configs_ok = False
     return all_configs_ok
 
-def main():
+def gwt_classify() -> str:
+    """
+    公文通信息分类函数，用于获取、分类和格式化公文通通知数据。
+    
+    流程：
+    1. 检查并加载配置
+    2. 从官网抓取通知数据
+    3. 根据用户类型进行AI分类（作为返回值）
+    4. 函数直接打印分类玩的内容，ai无需再次输出
+    
+    返回值:
+        str: 通知分类结果json，包括链接和标题等
+    """
     if not manage_configuration():
-        print("由于配置问题，程序无法继续。")
-        return
+        print("Cannot continue due to configuration issues.")
+        return ""
 
     # Example usage of loaded configurations:
     api_key = os.getenv('GEMINI_API_KEY')
@@ -91,7 +103,7 @@ def main():
         try:
             days_to_analyse = int(os.getenv('DAYS_TO_ANALYZE'))
         except ValueError:
-            print("警告: DAYS_TO_ANALYZE 配置项不是有效的整数，使用默认值 2。")
+            print("Warning: DAYS_TO_ANALYZE is not a valid integer, using default value 2.")
     USER_TYPE_MAP = {
     '1': '本科生',
     '2': '研究生',
@@ -99,15 +111,36 @@ def main():
     '4': '教师'
     }
     user_type = USER_TYPE_MAP.get(user_type_code)
-    print(f"配置加载成功: API Key (验证通过), User Type: {user_type}")
+    print(f"Configuration loaded successfully: API Key (verified), User Type: {user_type}")
 
     get_data_from_gwt()
     gwt_data_raw = get_data_stored(days_to_analyse)
     gwt_classify = ai_classify(user_type, gwt_data_raw)
     formatted_output = format_gwt_list(gwt_classify)
+
     print(formatted_output)
+    return gwt_classify
+
+def gwt_details(url: str) -> str:
+    """
+    获取特定通知页面的详细内容。
+    
+    参数:
+        url: str - 要抓取的通知页面URL
+        
+    流程:
+        1. 调用get_page_details获取页面标题、内容和附件信息
+        
+    返回值:
+        str: 通知内容
+    """
+
+    data = get_page_details(url)
+
+    return data
+
+    
 
 if __name__ == '__main__':
-    main()
-
+    talk_with_mashiro()
 

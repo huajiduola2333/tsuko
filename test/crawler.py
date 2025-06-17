@@ -4,6 +4,7 @@ from pathlib import Path
 from datetime import date
 sys.path.append(os.path.join(os.path.dirname(__file__), '../src'))
 from gwt import *
+from main import *
 from ai_analyse import *
 
 
@@ -15,4 +16,6 @@ from ai_analyse import *
 # result = ai_response(prompt, data)
 # output(result.text)
 
-print(get_page_details('https://nbw.sztu.edu.cn/info/1018/48976.htm'))
+# print(gwt_details_summary('https://nbw.sztu.edu.cn/info/1022/48984.htm'))
+# print(gwt_classify())
+talk_with_mashiro()
