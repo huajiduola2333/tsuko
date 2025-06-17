@@ -180,7 +180,7 @@ def analyze(data):
     response = ai_response(prompt, data)
     return response
 
-def output(response):
+def format_gwt_list(response):
     file_path = response_data_path
     
     # try:
@@ -225,14 +225,17 @@ def output(response):
         5: "教师",
         6: "全体师生"
     }
+    
+    output_lines = []
 
     if "message" in data and "summary" in data:
-        print(data["message"])
-        print(data["summary"])
-        print()
+        output_lines.append(data["message"])
+        output_lines.append(data["summary"])
+        output_lines.append("")
     else:
-        print("Error: JSON data does not contain 'message' or 'summary' keys.")
-        return
+        error_msg = "Error: JSON data does not contain 'message' or 'summary' keys."
+        output_lines.append(error_msg)
+        return "\n".join(output_lines)
 
     # 分组展示
     if "notices" in data and isinstance(data["notices"], list):
@@ -242,11 +245,84 @@ def output(response):
             grouped[category_name].append(notice)
 
         for category, notices_list in grouped.items():
-            print(f"\n📌 {category}：")
+            output_lines.append(f"\n📌 {category}：")
             for n in notices_list:
                 audience = audience_map.get(n.get("audience"), "未知对象")
-                print(f"- [{n.get('date', '未知日期')}] {n.get('title', '无标题')}（对象：{audience}）")
-                print(f"  🔗 {n.get('link', '无链接')}")
+                output_lines.append(f"- [{n.get('date', '未知日期')}] {n.get('title', '无标题')}（对象：{audience}）")
+                output_lines.append(f"  🔗 {n.get('link', '无链接')}")
     else:
-        print("Error: JSON data does not contain a 'notices' list or it's not a list.")
-        # print(f"Notices data: {data.get('notices')}")
+        error_msg = "Error: JSON data does not contain a 'notices' list or it's not a list."
+        output_lines.append(error_msg)
+    
+    return "\n".join(output_lines)
+
+def get_page_details(url: str):
+    """
+    Scrapes the title, main content, and attachments from a given SZTU news/notice URL.
+
+    Args:
+        url: The URL of the page to scrape.
+
+    Returns:
+        A dictionary containing:
+            'title': The title of the article.
+            'content': The main text content of the article.
+            'attachments': A list of dictionaries, where each attachment dict has
+                           'name' (filename) and 'link' (absolute URL to download).
+                           Returns an empty list if no attachments are found.
+    """
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+    page_details = {
+        'title': None,
+        'content': None,
+        'attachments': []
+    }
+
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        # Explicitly set encoding based on content detection
+        response.encoding = response.apparent_encoding
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Extract title
+        title_tag = soup.select_one('h1.article-title')
+        if title_tag:
+            page_details['title'] = title_tag.get_text(strip=True)
+
+        # Extract content
+        content_div = soup.select_one('div#vsb_content')
+        if content_div:
+            # Get text from all p tags within the content div
+            paragraphs = content_div.find_all('p')
+            content_texts = [p.get_text(strip=True) for p in paragraphs if p.get_text(strip=True)]
+            page_details['content'] = "\\n".join(content_texts)
+        else: # Fallback if no p tags or specific structure, get all text
+            content_div_fallback = soup.select_one('div.v_news_content') # Common parent for content
+            if content_div_fallback:
+                 page_details['content'] = content_div_fallback.get_text(separator='\\n', strip=True)
+
+
+        # Extract attachments
+        attachments_ul = soup.select_one('ul.fujian')
+        if attachments_ul:
+            for li in attachments_ul.select('li'):
+                a_tag = li.select_one('a')
+                if a_tag and a_tag.has_attr('href'):
+                    attachment_name = a_tag.get_text(strip=True)
+                    relative_link = a_tag['href']
+                    # Ensure base_url ends with a slash for proper joining if needed,
+                    # but urljoin handles it well.
+                    # Using the global base_url from the script
+                    absolute_link = requests.compat.urljoin(base_url, relative_link)
+                    page_details['attachments'].append({'name': attachment_name, 'link': absolute_link})
+        
+        return page_details
+
+    except requests.RequestException as e:
+        print(f"Error fetching URL {url}: {e}")
+        return page_details # Return what was gathered, or default empty
+    except Exception as e:
+        print(f"An error occurred while parsing {url}: {e}")
+        return page_details
+

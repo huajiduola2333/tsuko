@@ -86,7 +86,12 @@ def main():
     # Example usage of loaded configurations:
     api_key = os.getenv('GEMINI_API_KEY')
     user_type_code = os.getenv('USER_TYPE')
-    days_to_analyse = int(os.getenv('DAYS_TO_ANALYZE'))
+    days_to_analyse = 2
+    if os.getenv('DAYS_TO_ANALYZE'):
+        try:
+            days_to_analyse = int(os.getenv('DAYS_TO_ANALYZE'))
+        except ValueError:
+            print("警告: DAYS_TO_ANALYZE 配置项不是有效的整数，使用默认值 2。")
     USER_TYPE_MAP = {
     '1': '本科生',
     '2': '研究生',
@@ -99,7 +104,8 @@ def main():
     get_data_from_gwt()
     gwt_data_raw = get_data_stored(days_to_analyse)
     gwt_classify = ai_classify(user_type, gwt_data_raw)
-    output(gwt_classify)
+    formatted_output = format_gwt_list(gwt_classify)
+    print(formatted_output)
 
 if __name__ == '__main__':
     main()
