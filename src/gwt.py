@@ -138,7 +138,7 @@ def get_data_from_gwt(max_pages = 1):
     else:
         print(f"CSV文件未发生变化。总记录数: {len(final_df_to_save)}.")
 
-def get_data_stored(date_from = date.today(), delta = 2):
+def get_data_stored(delta = 2, date_from = date.today()):
     date_from_filter = date_from - timedelta(days=delta)
     result = []
 
@@ -180,25 +180,33 @@ def analyze(data):
     response = ai_response(prompt, data)
     return response
 
-def output():
+def output(response):
     file_path = response_data_path
     
-    try:
-        with open(file_path, "r", encoding="utf-8-sig") as f: 
-            json_str = f.read().strip()
-            if json_str.startswith("```json"):
-                json_str = json_str[7:]
-            if json_str.endswith("```"):
-                json_str = json_str[:-3]
-            json_str = json_str.strip()
-            data = json.loads(json_str)
+    # try:
+    #     with open(file_path, "r", encoding="utf-8-sig") as f: 
+    #         json_str = f.read().strip()
+    #         if json_str.startswith("```json"):
+    #             json_str = json_str[7:]
+    #         if json_str.endswith("```"):
+    #             json_str = json_str[:-3]
+    #         json_str = json_str.strip()
+    #         data = json.loads(json_str)
         
-    except FileNotFoundError:
-        print(f"Error: The file '{file_path}' was not found.")
-        return
-    except json.JSONDecodeError as e:
-        print(f"Error decoding JSON from '{file_path}': {e}")
-        return
+    # except FileNotFoundError:
+    #     print(f"Error: The file '{file_path}' was not found.")
+    #     return
+    # except json.JSONDecodeError as e:
+    #     print(f"Error decoding JSON from '{file_path}': {e}")
+    #     return
+    
+    json_str = response.strip()
+    if json_str.startswith("```json"):
+        json_str = json_str[7:]
+    if json_str.endswith("```"):
+        json_str = json_str[:-3]
+    json_str = json_str.strip()
+    data = json.loads(json_str)
 
     category_map = {
         1: "教学与学生管理",
