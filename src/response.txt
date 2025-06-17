@@ -1,0 +1,64 @@
+```json
+{
+  "message": "喵呜~ 数据处理完毕，主人请过目喵~",
+  "summary": "本次通知中，对本科生比较重要的事项包括工业软件进校园宣讲、讲坛活动、国际硕士招生宣讲会以及瑞士线上课程申请等。请同学们积极关注，踊跃参与的说~",
+  "notices": [
+    {
+      "title": "国产工业软件进校园（第二场：结构仿真方向）暨深圳技术大学大湾区工业软件人才培养精英班宣讲",
+      "link": "https://nbw.sztu.edu.cn/info/1022/48959.htm",
+      "date": "2025-06-16",
+      "category": 3,
+      "audience": 1
+    },
+    {
+      "title": "关于举办“技大讲坛”第九十六讲的通知",
+      "link": "https://nbw.sztu.edu.cn/info/1019/48960.htm",
+      "date": "2025-06-16",
+      "category": 3,
+      "audience": 6
+    },
+    {
+      "title": "关于开展米乐托育园深圳技术大学专场亲子活动的通知",
+      "link": "https://nbw.sztu.edu.cn/info/1020/48958.htm",
+      "date": "2025-06-13",
+      "category": 5,
+      "audience": 6
+    },
+    {
+      "title": "关于开展爱尔兰都柏林城市大学硕士招生宣讲会的通知",
+      "link": "https://nbw.sztu.edu.cn/info/1021/48957.htm",
+      "date": "2025-06-13",
+      "category": 6,
+      "audience": 4
+    },
+    {
+      "title": "关于做好2026年校内装饰修缮工程、实验室装修工程及其他维护修缮工程预算编制的通知",
+      "link": "https://nbw.sztu.edu.cn/info/1020/48956.htm",
+      "date": "2025-06-13",
+      "category": 5,
+      "audience": 5
+    },
+    {
+      "title": "关于开展2025年深圳市哲学社科规划课题结项或延期的通知",
+      "link": "https://nbw.sztu.edu.cn/info/1019/48955.htm",
+      "date": "2025-06-13",
+      "category": 2,
+      "audience": 5
+    },
+    {
+      "title": "关于瑞士西北应用科学与艺术大学线上课程申请的通知",
+      "link": "https://nbw.sztu.edu.cn/info/1021/48954.htm",
+      "date": "2025-06-13",
+      "category": 6,
+      "audience": 4
+    },
+    {
+      "title": "关于近期国家自然科学基金项目申报信息汇总的温馨提示（6月13日有更新）",
+      "link": "https://nbw.sztu.edu.cn/info/1019/47005.htm",
+      "date": "2025-06-13",
+      "category": 2,
+      "audience": 5
+    }
+  ]
+}
+```

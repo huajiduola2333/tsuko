@@ -1,0 +1,67 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+
+# VSCode settings
+.vscode/
+
+# macOS system files
+.DS_Store
+
+# Pytest and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Cache and metadata
+.cache/
+.mypy_cache/
+.pyre/
+.pytype/
+
+# Build / distribution folders
+build/
+dist/
+*.egg-info/
+
+# Environment variables and config
+.env
+.env.*
+
+# Personal or sensitive files
+secret.*
+apikey.*
+*.key
+*.pem
+
+# Project-specific
+*.csv
+/resources/*.txt
+
+# If you're writing models or downloads
+models/
+downloads/
+
+# Ignore output/result files
+*.out
+*.bak
+
+# IDEs
+.idea/
+*.iml
