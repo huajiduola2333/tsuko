@@ -80,28 +80,27 @@ def manage_configuration():
 
 def gwt_classify() -> str:
     """
-    公文通信息分类函数，用于获取、分类和格式化公文通通知数据。
+    公文通信息获取并分类函数，用于获取、分类和格式化公文通通知数据。
+    如果需要查看公文通内容，调用此函数，返回内容包括公文通具体页面的链接
     
     流程：
     1. 检查并加载配置
     2. 从官网抓取通知数据
     3. 根据用户类型进行AI分类（作为返回值）
-    4. 函数直接打印分类玩的内容，ai无需再次输出
+    4. 函数直接打印分类完毕的内容，ai无需再次输出
     
     返回值:
         str: 通知分类结果json，包括链接和标题等
     """
-    if not manage_configuration():
-        print("Cannot continue due to configuration issues.")
-        return ""
+
 
     # Example usage of loaded configurations:
     api_key = os.getenv('GEMINI_API_KEY')
     user_type_code = os.getenv('USER_TYPE')
-    days_to_analyse = 2
+    days_to_analyse = 2 - 1
     if os.getenv('DAYS_TO_ANALYZE'):
         try:
-            days_to_analyse = int(os.getenv('DAYS_TO_ANALYZE'))
+            days_to_analyse = int(os.getenv('DAYS_TO_ANALYZE')) - 1
         except ValueError:
             print("Warning: DAYS_TO_ANALYZE is not a valid integer, using default value 2.")
     USER_TYPE_MAP = {
@@ -111,7 +110,7 @@ def gwt_classify() -> str:
     '4': '教师'
     }
     user_type = USER_TYPE_MAP.get(user_type_code)
-    print(f"Configuration loaded successfully: API Key (verified), User Type: {user_type}")
+    print(f"配置文件加载成功: API Key (verified), User Type: {user_type}")
 
     get_data_from_gwt()
     gwt_data_raw = get_data_stored(days_to_analyse)
@@ -123,24 +122,30 @@ def gwt_classify() -> str:
 
 def gwt_details(url: str) -> str:
     """
-    获取特定通知页面的详细内容。
+    获取特定公文通通知的详细内容。
     
     参数:
-        url: str - 要抓取的通知页面URL
+        url: str - 要抓取的公文通页面URL
         
     流程:
         1. 调用get_page_details获取页面标题、内容和附件信息
         
     返回值:
-        str: 通知内容
+        str: 通知内容，包含附件
     """
 
     data = get_page_details(url)
 
     return data
 
-    
+def main():
+    if not manage_configuration():
+        print("配置文件出错，请检查配置文件内容")
+        return ""
+    talk_with_mashiro()
 
 if __name__ == '__main__':
-    talk_with_mashiro()
+    
+    main()
+
 

@@ -17,7 +17,7 @@ base_url = 'https://nbw.sztu.edu.cn/'
 gwt_data_path = DATA_DIR / 'gwt_data.csv'
 response_data_path = DATA_DIR / 'response.txt'
 
-def get_data_from_gwt(max_pages = 1):
+def get_data_from_gwt(max_pages = 3):
     wbtreeid = '1029'
     total_pages = max_pages
     date_today = date.today()
@@ -134,12 +134,12 @@ def get_data_from_gwt(max_pages = 1):
     if new_rows_list:
         print(f"保存了 {len(new_rows_list)} 条新记录。CSV中总记录数: {len(final_df_to_save)}.")
     elif not existing_df.equals(final_df_to_save):
-         print(f"数据已重新处理 (例如排序/去重)。CSV中总记录数: {len(final_df_to_save)}.")
+         print(f"数据已重新处理。CSV中总记录数: {len(final_df_to_save)}.")
     else:
         print(f"CSV文件未发生变化。总记录数: {len(final_df_to_save)}.")
 
 def get_data_stored(delta = 2, date_from = date.today()):
-    date_from_filter = date_from - timedelta(days=delta)
+    date_from_filter = date_from - timedelta(days=delta) 
     result = []
 
     if not gwt_data_path.exists() or gwt_data_path.stat().st_size == 0:
